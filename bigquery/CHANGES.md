@@ -3,6 +3,19 @@
 
 
 
+## [1.58.0](https://github.com/googleapis/google-cloud-go/compare/bigquery/v1.57.1...bigquery/v1.58.0) (2023-12-08)
+
+
+### Features
+
+* **bigquery:** Add DataGovernanceType to routines ([#8990](https://github.com/googleapis/google-cloud-go/issues/8990)) ([57491ae](https://github.com/googleapis/google-cloud-go/commit/57491ae3b7bbcee2abe1064dfb4f18cb3a511265))
+* **bigquery:** Add schema support for RANGE type ([#9050](https://github.com/googleapis/google-cloud-go/issues/9050)) ([477ccee](https://github.com/googleapis/google-cloud-go/commit/477ccee8eb210a0e0f9c71513318e0fbbd08928c))
+
+
+### Documentation
+
+* **bigquery:** Update package docs to show query parameterization ([#8965](https://github.com/googleapis/google-cloud-go/issues/8965)) ([cc76ab3](https://github.com/googleapis/google-cloud-go/commit/cc76ab35c25a672ed3255c0b26a99bef2cb81868))
+
 ## [1.57.1](https://github.com/googleapis/google-cloud-go/compare/bigquery/v1.57.0...bigquery/v1.57.1) (2023-11-01)
 
 
