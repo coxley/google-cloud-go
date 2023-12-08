@@ -2737,6 +2737,10 @@ type CreateCloudInstanceAction struct {
 	NodeCount *int32 `protobuf:"varint,4,opt,name=node_count,json=nodeCount,proto3,oneof" json:"node_count,omitempty"`
 	// Number of processing units (node_count should be set to 0 if used).
 	ProcessingUnits *int32 `protobuf:"varint,6,opt,name=processing_units,json=processingUnits,proto3,oneof" json:"processing_units,omitempty"`
+	// The autoscaling config for this instance. If non-empty, an autoscaling
+	// instance will be created (processing_units and node_count should be set to
+	// 0 if used).
+	AutoscalingConfig *instancepb.AutoscalingConfig `protobuf:"bytes,7,opt,name=autoscaling_config,json=autoscalingConfig,proto3,oneof" json:"autoscaling_config,omitempty"`
 	// labels.
 	Labels map[string]string `protobuf:"bytes,5,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
@@ -2808,6 +2812,13 @@ func (x *CreateCloudInstanceAction) GetProcessingUnits() int32 {
 	return 0
 }
 
+func (x *CreateCloudInstanceAction) GetAutoscalingConfig() *instancepb.AutoscalingConfig {
+	if x != nil {
+		return x.AutoscalingConfig
+	}
+	return nil
+}
+
 func (x *CreateCloudInstanceAction) GetLabels() map[string]string {
 	if x != nil {
 		return x.Labels
@@ -2834,6 +2845,10 @@ type UpdateCloudInstanceAction struct {
 	// The number of processing units allocated to this instance. At most one of
 	// processing_units or node_count should be present in the message.
 	ProcessingUnits *int32 `protobuf:"varint,5,opt,name=processing_units,json=processingUnits,proto3,oneof" json:"processing_units,omitempty"`
+	// The autoscaling config for this instance. If non-empty, this instance is
+	// using autoscaling (processing_units and node_count should be set to
+	// 0 if used).
+	AutoscalingConfig *instancepb.AutoscalingConfig `protobuf:"bytes,7,opt,name=autoscaling_config,json=autoscalingConfig,proto3,oneof" json:"autoscaling_config,omitempty"`
 	// labels.
 	Labels map[string]string `protobuf:"bytes,6,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
@@ -2903,6 +2918,13 @@ func (x *UpdateCloudInstanceAction) GetProcessingUnits() int32 {
 		return *x.ProcessingUnits
 	}
 	return 0
+}
+
+func (x *UpdateCloudInstanceAction) GetAutoscalingConfig() *instancepb.AutoscalingConfig {
+	if x != nil {
+		return x.AutoscalingConfig
+	}
+	return nil
 }
 
 func (x *UpdateCloudInstanceAction) GetLabels() map[string]string {
@@ -7435,7 +7457,7 @@ var file_google_spanner_executor_v1_cloud_executor_proto_rawDesc = []byte{
 	0x20, 0x01, 0x28, 0x09, 0x48, 0x01, 0x52, 0x09, 0x70, 0x61, 0x67, 0x65, 0x54, 0x6f, 0x6b, 0x65,
 	0x6e, 0x88, 0x01, 0x01, 0x42, 0x0c, 0x0a, 0x0a, 0x5f, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x73, 0x69,
 	0x7a, 0x65, 0x42, 0x0d, 0x0a, 0x0b, 0x5f, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x74, 0x6f, 0x6b, 0x65,
-	0x6e, 0x22, 0x97, 0x03, 0x0a, 0x19, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x6f, 0x75,
+	0x6e, 0x22, 0x97, 0x04, 0x0a, 0x19, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x6f, 0x75,
 	0x64, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
 	0x1f, 0x0a, 0x0b, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x49, 0x64,
@@ -7449,18 +7471,26 @@ var file_google_spanner_executor_v1_cloud_executor_proto_rawDesc = []byte{
 	0x01, 0x12, 0x2e, 0x0a, 0x10, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x5f,
 	0x75, 0x6e, 0x69, 0x74, 0x73, 0x18, 0x06, 0x20, 0x01, 0x28, 0x05, 0x48, 0x01, 0x52, 0x0f, 0x70,
 	0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x55, 0x6e, 0x69, 0x74, 0x73, 0x88, 0x01,
-	0x01, 0x12, 0x59, 0x0a, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28,
-	0x0b, 0x32, 0x41, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x73, 0x70, 0x61, 0x6e, 0x6e,
-	0x65, 0x72, 0x2e, 0x65, 0x78, 0x65, 0x63, 0x75, 0x74, 0x6f, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x43,
-	0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e,
-	0x63, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45,
-	0x6e, 0x74, 0x72, 0x79, 0x52, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x1a, 0x39, 0x0a, 0x0b,
-	0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b,
-	0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a,
-	0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61,
-	0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x0d, 0x0a, 0x0b, 0x5f, 0x6e, 0x6f, 0x64, 0x65,
-	0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x13, 0x0a, 0x11, 0x5f, 0x70, 0x72, 0x6f, 0x63, 0x65,
-	0x73, 0x73, 0x69, 0x6e, 0x67, 0x5f, 0x75, 0x6e, 0x69, 0x74, 0x73, 0x22, 0xa2, 0x03, 0x0a, 0x19,
+	0x01, 0x12, 0x67, 0x0a, 0x12, 0x61, 0x75, 0x74, 0x6f, 0x73, 0x63, 0x61, 0x6c, 0x69, 0x6e, 0x67,
+	0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x33, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x73, 0x70, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x2e, 0x61,
+	0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x2e, 0x76, 0x31,
+	0x2e, 0x41, 0x75, 0x74, 0x6f, 0x73, 0x63, 0x61, 0x6c, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6e, 0x66,
+	0x69, 0x67, 0x48, 0x02, 0x52, 0x11, 0x61, 0x75, 0x74, 0x6f, 0x73, 0x63, 0x61, 0x6c, 0x69, 0x6e,
+	0x67, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x88, 0x01, 0x01, 0x12, 0x59, 0x0a, 0x06, 0x6c, 0x61,
+	0x62, 0x65, 0x6c, 0x73, 0x18, 0x05, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x41, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x73, 0x70, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x2e, 0x65, 0x78, 0x65, 0x63,
+	0x75, 0x74, 0x6f, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x43, 0x6c,
+	0x6f, 0x75, 0x64, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x2e, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x06, 0x6c,
+	0x61, 0x62, 0x65, 0x6c, 0x73, 0x1a, 0x39, 0x0a, 0x0b, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45,
+	0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01,
+	0x42, 0x0d, 0x0a, 0x0b, 0x5f, 0x6e, 0x6f, 0x64, 0x65, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42,
+	0x13, 0x0a, 0x11, 0x5f, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x5f, 0x75,
+	0x6e, 0x69, 0x74, 0x73, 0x42, 0x15, 0x0a, 0x13, 0x5f, 0x61, 0x75, 0x74, 0x6f, 0x73, 0x63, 0x61,
+	0x6c, 0x69, 0x6e, 0x67, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x22, 0xa2, 0x04, 0x0a, 0x19,
 	0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x49, 0x6e, 0x73, 0x74, 0x61,
 	0x6e, 0x63, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1f, 0x0a, 0x0b, 0x69, 0x6e, 0x73,
 	0x74, 0x61, 0x6e, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a,
@@ -7474,19 +7504,27 @@ var file_google_spanner_executor_v1_cloud_executor_proto_rawDesc = []byte{
 	0x6e, 0x74, 0x88, 0x01, 0x01, 0x12, 0x2e, 0x0a, 0x10, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73,
 	0x69, 0x6e, 0x67, 0x5f, 0x75, 0x6e, 0x69, 0x74, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x48,
 	0x02, 0x52, 0x0f, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x55, 0x6e, 0x69,
-	0x74, 0x73, 0x88, 0x01, 0x01, 0x12, 0x59, 0x0a, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x18,
-	0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x41, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x73,
-	0x70, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x2e, 0x65, 0x78, 0x65, 0x63, 0x75, 0x74, 0x6f, 0x72, 0x2e,
-	0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x49, 0x6e,
-	0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x61, 0x62,
-	0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73,
-	0x1a, 0x39, 0x0a, 0x0b, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12,
-	0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65,
-	0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x42, 0x0f, 0x0a, 0x0d, 0x5f,
-	0x64, 0x69, 0x73, 0x70, 0x6c, 0x61, 0x79, 0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x42, 0x0d, 0x0a, 0x0b,
-	0x5f, 0x6e, 0x6f, 0x64, 0x65, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x13, 0x0a, 0x11, 0x5f,
-	0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x69, 0x6e, 0x67, 0x5f, 0x75, 0x6e, 0x69, 0x74, 0x73,
+	0x74, 0x73, 0x88, 0x01, 0x01, 0x12, 0x67, 0x0a, 0x12, 0x61, 0x75, 0x74, 0x6f, 0x73, 0x63, 0x61,
+	0x6c, 0x69, 0x6e, 0x67, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x18, 0x07, 0x20, 0x01, 0x28,
+	0x0b, 0x32, 0x33, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x73, 0x70, 0x61, 0x6e, 0x6e,
+	0x65, 0x72, 0x2e, 0x61, 0x64, 0x6d, 0x69, 0x6e, 0x2e, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63,
+	0x65, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74, 0x6f, 0x73, 0x63, 0x61, 0x6c, 0x69, 0x6e, 0x67,
+	0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x48, 0x03, 0x52, 0x11, 0x61, 0x75, 0x74, 0x6f, 0x73, 0x63,
+	0x61, 0x6c, 0x69, 0x6e, 0x67, 0x43, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x88, 0x01, 0x01, 0x12, 0x59,
+	0x0a, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x18, 0x06, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x41,
+	0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x73, 0x70, 0x61, 0x6e, 0x6e, 0x65, 0x72, 0x2e,
+	0x65, 0x78, 0x65, 0x63, 0x75, 0x74, 0x6f, 0x72, 0x2e, 0x76, 0x31, 0x2e, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x41,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x4c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72,
+	0x79, 0x52, 0x06, 0x6c, 0x61, 0x62, 0x65, 0x6c, 0x73, 0x1a, 0x39, 0x0a, 0x0b, 0x4c, 0x61, 0x62,
+	0x65, 0x6c, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b, 0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65,
+	0x3a, 0x02, 0x38, 0x01, 0x42, 0x0f, 0x0a, 0x0d, 0x5f, 0x64, 0x69, 0x73, 0x70, 0x6c, 0x61, 0x79,
+	0x5f, 0x6e, 0x61, 0x6d, 0x65, 0x42, 0x0d, 0x0a, 0x0b, 0x5f, 0x6e, 0x6f, 0x64, 0x65, 0x5f, 0x63,
+	0x6f, 0x75, 0x6e, 0x74, 0x42, 0x13, 0x0a, 0x11, 0x5f, 0x70, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73,
+	0x69, 0x6e, 0x67, 0x5f, 0x75, 0x6e, 0x69, 0x74, 0x73, 0x42, 0x15, 0x0a, 0x13, 0x5f, 0x61, 0x75,
+	0x74, 0x6f, 0x73, 0x63, 0x61, 0x6c, 0x69, 0x6e, 0x67, 0x5f, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67,
 	0x22, 0x5b, 0x0a, 0x19, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x6c, 0x6f, 0x75, 0x64, 0x49,
 	0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1f, 0x0a,
 	0x0b, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
@@ -8219,15 +8257,16 @@ var file_google_spanner_executor_v1_cloud_executor_proto_goTypes = []interface{}
 	(*timestamppb.Timestamp)(nil),                // 82: google.protobuf.Timestamp
 	(*spannerpb.Type)(nil),                       // 83: google.spanner.v1.Type
 	(*instancepb.ReplicaInfo)(nil),               // 84: google.spanner.admin.instance.v1.ReplicaInfo
-	(*databasepb.EncryptionConfig)(nil),          // 85: google.spanner.admin.database.v1.EncryptionConfig
-	(*status.Status)(nil),                        // 86: google.rpc.Status
-	(*databasepb.Backup)(nil),                    // 87: google.spanner.admin.database.v1.Backup
-	(*longrunningpb.Operation)(nil),              // 88: google.longrunning.Operation
-	(*instancepb.Instance)(nil),                  // 89: google.spanner.admin.instance.v1.Instance
-	(*instancepb.InstanceConfig)(nil),            // 90: google.spanner.admin.instance.v1.InstanceConfig
-	(*databasepb.Database)(nil),                  // 91: google.spanner.admin.database.v1.Database
-	(*spannerpb.StructType)(nil),                 // 92: google.spanner.v1.StructType
-	(spannerpb.RequestOptions_Priority)(0),       // 93: google.spanner.v1.RequestOptions.Priority
+	(*instancepb.AutoscalingConfig)(nil),         // 85: google.spanner.admin.instance.v1.AutoscalingConfig
+	(*databasepb.EncryptionConfig)(nil),          // 86: google.spanner.admin.database.v1.EncryptionConfig
+	(*status.Status)(nil),                        // 87: google.rpc.Status
+	(*databasepb.Backup)(nil),                    // 88: google.spanner.admin.database.v1.Backup
+	(*longrunningpb.Operation)(nil),              // 89: google.longrunning.Operation
+	(*instancepb.Instance)(nil),                  // 90: google.spanner.admin.instance.v1.Instance
+	(*instancepb.InstanceConfig)(nil),            // 91: google.spanner.admin.instance.v1.InstanceConfig
+	(*databasepb.Database)(nil),                  // 92: google.spanner.admin.database.v1.Database
+	(*spannerpb.StructType)(nil),                 // 93: google.spanner.v1.StructType
+	(spannerpb.RequestOptions_Priority)(0),       // 94: google.spanner.v1.RequestOptions.Priority
 }
 var file_google_spanner_executor_v1_cloud_executor_proto_depIdxs = []int32{
 	4,   // 0: google.spanner.executor.v1.SpannerAsyncActionRequest.action:type_name -> google.spanner.executor.v1.SpannerAction
@@ -8303,76 +8342,78 @@ var file_google_spanner_executor_v1_cloud_executor_proto_depIdxs = []int32{
 	35,  // 70: google.spanner.executor.v1.AdminAction.reconfigure_cloud_database:type_name -> google.spanner.executor.v1.ReconfigureCloudDatabaseAction
 	84,  // 71: google.spanner.executor.v1.CreateUserInstanceConfigAction.replicas:type_name -> google.spanner.admin.instance.v1.ReplicaInfo
 	76,  // 72: google.spanner.executor.v1.UpdateUserInstanceConfigAction.labels:type_name -> google.spanner.executor.v1.UpdateUserInstanceConfigAction.LabelsEntry
-	77,  // 73: google.spanner.executor.v1.CreateCloudInstanceAction.labels:type_name -> google.spanner.executor.v1.CreateCloudInstanceAction.LabelsEntry
-	78,  // 74: google.spanner.executor.v1.UpdateCloudInstanceAction.labels:type_name -> google.spanner.executor.v1.UpdateCloudInstanceAction.LabelsEntry
-	85,  // 75: google.spanner.executor.v1.CreateCloudDatabaseAction.encryption_config:type_name -> google.spanner.admin.database.v1.EncryptionConfig
-	82,  // 76: google.spanner.executor.v1.CreateCloudBackupAction.expire_time:type_name -> google.protobuf.Timestamp
-	82,  // 77: google.spanner.executor.v1.CreateCloudBackupAction.version_time:type_name -> google.protobuf.Timestamp
-	82,  // 78: google.spanner.executor.v1.CopyCloudBackupAction.expire_time:type_name -> google.protobuf.Timestamp
-	82,  // 79: google.spanner.executor.v1.UpdateCloudBackupAction.expire_time:type_name -> google.protobuf.Timestamp
-	82,  // 80: google.spanner.executor.v1.StartBatchTransactionAction.batch_txn_time:type_name -> google.protobuf.Timestamp
-	5,   // 81: google.spanner.executor.v1.GenerateDbPartitionsForReadAction.read:type_name -> google.spanner.executor.v1.ReadAction
-	18,  // 82: google.spanner.executor.v1.GenerateDbPartitionsForReadAction.table:type_name -> google.spanner.executor.v1.TableMetadata
-	6,   // 83: google.spanner.executor.v1.GenerateDbPartitionsForQueryAction.query:type_name -> google.spanner.executor.v1.QueryAction
-	55,  // 84: google.spanner.executor.v1.ExecutePartitionAction.partition:type_name -> google.spanner.executor.v1.BatchPartition
-	82,  // 85: google.spanner.executor.v1.ExecuteChangeStreamQuery.start_time:type_name -> google.protobuf.Timestamp
-	82,  // 86: google.spanner.executor.v1.ExecuteChangeStreamQuery.end_time:type_name -> google.protobuf.Timestamp
-	86,  // 87: google.spanner.executor.v1.SpannerActionOutcome.status:type_name -> google.rpc.Status
-	82,  // 88: google.spanner.executor.v1.SpannerActionOutcome.commit_time:type_name -> google.protobuf.Timestamp
-	65,  // 89: google.spanner.executor.v1.SpannerActionOutcome.read_result:type_name -> google.spanner.executor.v1.ReadResult
-	66,  // 90: google.spanner.executor.v1.SpannerActionOutcome.query_result:type_name -> google.spanner.executor.v1.QueryResult
-	55,  // 91: google.spanner.executor.v1.SpannerActionOutcome.db_partition:type_name -> google.spanner.executor.v1.BatchPartition
-	59,  // 92: google.spanner.executor.v1.SpannerActionOutcome.admin_result:type_name -> google.spanner.executor.v1.AdminResult
-	67,  // 93: google.spanner.executor.v1.SpannerActionOutcome.change_stream_records:type_name -> google.spanner.executor.v1.ChangeStreamRecord
-	60,  // 94: google.spanner.executor.v1.AdminResult.backup_response:type_name -> google.spanner.executor.v1.CloudBackupResponse
-	61,  // 95: google.spanner.executor.v1.AdminResult.operation_response:type_name -> google.spanner.executor.v1.OperationResponse
-	64,  // 96: google.spanner.executor.v1.AdminResult.database_response:type_name -> google.spanner.executor.v1.CloudDatabaseResponse
-	62,  // 97: google.spanner.executor.v1.AdminResult.instance_response:type_name -> google.spanner.executor.v1.CloudInstanceResponse
-	63,  // 98: google.spanner.executor.v1.AdminResult.instance_config_response:type_name -> google.spanner.executor.v1.CloudInstanceConfigResponse
-	87,  // 99: google.spanner.executor.v1.CloudBackupResponse.listed_backups:type_name -> google.spanner.admin.database.v1.Backup
-	88,  // 100: google.spanner.executor.v1.CloudBackupResponse.listed_backup_operations:type_name -> google.longrunning.Operation
-	87,  // 101: google.spanner.executor.v1.CloudBackupResponse.backup:type_name -> google.spanner.admin.database.v1.Backup
-	88,  // 102: google.spanner.executor.v1.OperationResponse.listed_operations:type_name -> google.longrunning.Operation
-	88,  // 103: google.spanner.executor.v1.OperationResponse.operation:type_name -> google.longrunning.Operation
-	89,  // 104: google.spanner.executor.v1.CloudInstanceResponse.listed_instances:type_name -> google.spanner.admin.instance.v1.Instance
-	89,  // 105: google.spanner.executor.v1.CloudInstanceResponse.instance:type_name -> google.spanner.admin.instance.v1.Instance
-	90,  // 106: google.spanner.executor.v1.CloudInstanceConfigResponse.listed_instance_configs:type_name -> google.spanner.admin.instance.v1.InstanceConfig
-	90,  // 107: google.spanner.executor.v1.CloudInstanceConfigResponse.instance_config:type_name -> google.spanner.admin.instance.v1.InstanceConfig
-	91,  // 108: google.spanner.executor.v1.CloudDatabaseResponse.listed_databases:type_name -> google.spanner.admin.database.v1.Database
-	88,  // 109: google.spanner.executor.v1.CloudDatabaseResponse.listed_database_operations:type_name -> google.longrunning.Operation
-	91,  // 110: google.spanner.executor.v1.CloudDatabaseResponse.database:type_name -> google.spanner.admin.database.v1.Database
-	12,  // 111: google.spanner.executor.v1.ReadResult.row:type_name -> google.spanner.executor.v1.ValueList
-	92,  // 112: google.spanner.executor.v1.ReadResult.row_type:type_name -> google.spanner.v1.StructType
-	12,  // 113: google.spanner.executor.v1.QueryResult.row:type_name -> google.spanner.executor.v1.ValueList
-	92,  // 114: google.spanner.executor.v1.QueryResult.row_type:type_name -> google.spanner.v1.StructType
-	68,  // 115: google.spanner.executor.v1.ChangeStreamRecord.data_change:type_name -> google.spanner.executor.v1.DataChangeRecord
-	69,  // 116: google.spanner.executor.v1.ChangeStreamRecord.child_partition:type_name -> google.spanner.executor.v1.ChildPartitionsRecord
-	70,  // 117: google.spanner.executor.v1.ChangeStreamRecord.heartbeat:type_name -> google.spanner.executor.v1.HeartbeatRecord
-	82,  // 118: google.spanner.executor.v1.DataChangeRecord.commit_time:type_name -> google.protobuf.Timestamp
-	79,  // 119: google.spanner.executor.v1.DataChangeRecord.column_types:type_name -> google.spanner.executor.v1.DataChangeRecord.ColumnType
-	80,  // 120: google.spanner.executor.v1.DataChangeRecord.mods:type_name -> google.spanner.executor.v1.DataChangeRecord.Mod
-	82,  // 121: google.spanner.executor.v1.ChildPartitionsRecord.start_time:type_name -> google.protobuf.Timestamp
-	81,  // 122: google.spanner.executor.v1.ChildPartitionsRecord.child_partitions:type_name -> google.spanner.executor.v1.ChildPartitionsRecord.ChildPartition
-	82,  // 123: google.spanner.executor.v1.HeartbeatRecord.heartbeat_time:type_name -> google.protobuf.Timestamp
-	83,  // 124: google.spanner.executor.v1.QueryAction.Parameter.type:type_name -> google.spanner.v1.Type
-	9,   // 125: google.spanner.executor.v1.QueryAction.Parameter.value:type_name -> google.spanner.executor.v1.Value
-	83,  // 126: google.spanner.executor.v1.MutationAction.InsertArgs.type:type_name -> google.spanner.v1.Type
-	12,  // 127: google.spanner.executor.v1.MutationAction.InsertArgs.values:type_name -> google.spanner.executor.v1.ValueList
-	83,  // 128: google.spanner.executor.v1.MutationAction.UpdateArgs.type:type_name -> google.spanner.v1.Type
-	12,  // 129: google.spanner.executor.v1.MutationAction.UpdateArgs.values:type_name -> google.spanner.executor.v1.ValueList
-	72,  // 130: google.spanner.executor.v1.MutationAction.Mod.insert:type_name -> google.spanner.executor.v1.MutationAction.InsertArgs
-	73,  // 131: google.spanner.executor.v1.MutationAction.Mod.update:type_name -> google.spanner.executor.v1.MutationAction.UpdateArgs
-	72,  // 132: google.spanner.executor.v1.MutationAction.Mod.insert_or_update:type_name -> google.spanner.executor.v1.MutationAction.InsertArgs
-	72,  // 133: google.spanner.executor.v1.MutationAction.Mod.replace:type_name -> google.spanner.executor.v1.MutationAction.InsertArgs
-	11,  // 134: google.spanner.executor.v1.MutationAction.Mod.delete_keys:type_name -> google.spanner.executor.v1.KeySet
-	93,  // 135: google.spanner.executor.v1.PartitionedUpdateAction.ExecutePartitionedUpdateOptions.rpc_priority:type_name -> google.spanner.v1.RequestOptions.Priority
-	2,   // 136: google.spanner.executor.v1.SpannerExecutorProxy.ExecuteActionAsync:input_type -> google.spanner.executor.v1.SpannerAsyncActionRequest
-	3,   // 137: google.spanner.executor.v1.SpannerExecutorProxy.ExecuteActionAsync:output_type -> google.spanner.executor.v1.SpannerAsyncActionResponse
-	137, // [137:138] is the sub-list for method output_type
-	136, // [136:137] is the sub-list for method input_type
-	136, // [136:136] is the sub-list for extension type_name
-	136, // [136:136] is the sub-list for extension extendee
-	0,   // [0:136] is the sub-list for field type_name
+	85,  // 73: google.spanner.executor.v1.CreateCloudInstanceAction.autoscaling_config:type_name -> google.spanner.admin.instance.v1.AutoscalingConfig
+	77,  // 74: google.spanner.executor.v1.CreateCloudInstanceAction.labels:type_name -> google.spanner.executor.v1.CreateCloudInstanceAction.LabelsEntry
+	85,  // 75: google.spanner.executor.v1.UpdateCloudInstanceAction.autoscaling_config:type_name -> google.spanner.admin.instance.v1.AutoscalingConfig
+	78,  // 76: google.spanner.executor.v1.UpdateCloudInstanceAction.labels:type_name -> google.spanner.executor.v1.UpdateCloudInstanceAction.LabelsEntry
+	86,  // 77: google.spanner.executor.v1.CreateCloudDatabaseAction.encryption_config:type_name -> google.spanner.admin.database.v1.EncryptionConfig
+	82,  // 78: google.spanner.executor.v1.CreateCloudBackupAction.expire_time:type_name -> google.protobuf.Timestamp
+	82,  // 79: google.spanner.executor.v1.CreateCloudBackupAction.version_time:type_name -> google.protobuf.Timestamp
+	82,  // 80: google.spanner.executor.v1.CopyCloudBackupAction.expire_time:type_name -> google.protobuf.Timestamp
+	82,  // 81: google.spanner.executor.v1.UpdateCloudBackupAction.expire_time:type_name -> google.protobuf.Timestamp
+	82,  // 82: google.spanner.executor.v1.StartBatchTransactionAction.batch_txn_time:type_name -> google.protobuf.Timestamp
+	5,   // 83: google.spanner.executor.v1.GenerateDbPartitionsForReadAction.read:type_name -> google.spanner.executor.v1.ReadAction
+	18,  // 84: google.spanner.executor.v1.GenerateDbPartitionsForReadAction.table:type_name -> google.spanner.executor.v1.TableMetadata
+	6,   // 85: google.spanner.executor.v1.GenerateDbPartitionsForQueryAction.query:type_name -> google.spanner.executor.v1.QueryAction
+	55,  // 86: google.spanner.executor.v1.ExecutePartitionAction.partition:type_name -> google.spanner.executor.v1.BatchPartition
+	82,  // 87: google.spanner.executor.v1.ExecuteChangeStreamQuery.start_time:type_name -> google.protobuf.Timestamp
+	82,  // 88: google.spanner.executor.v1.ExecuteChangeStreamQuery.end_time:type_name -> google.protobuf.Timestamp
+	87,  // 89: google.spanner.executor.v1.SpannerActionOutcome.status:type_name -> google.rpc.Status
+	82,  // 90: google.spanner.executor.v1.SpannerActionOutcome.commit_time:type_name -> google.protobuf.Timestamp
+	65,  // 91: google.spanner.executor.v1.SpannerActionOutcome.read_result:type_name -> google.spanner.executor.v1.ReadResult
+	66,  // 92: google.spanner.executor.v1.SpannerActionOutcome.query_result:type_name -> google.spanner.executor.v1.QueryResult
+	55,  // 93: google.spanner.executor.v1.SpannerActionOutcome.db_partition:type_name -> google.spanner.executor.v1.BatchPartition
+	59,  // 94: google.spanner.executor.v1.SpannerActionOutcome.admin_result:type_name -> google.spanner.executor.v1.AdminResult
+	67,  // 95: google.spanner.executor.v1.SpannerActionOutcome.change_stream_records:type_name -> google.spanner.executor.v1.ChangeStreamRecord
+	60,  // 96: google.spanner.executor.v1.AdminResult.backup_response:type_name -> google.spanner.executor.v1.CloudBackupResponse
+	61,  // 97: google.spanner.executor.v1.AdminResult.operation_response:type_name -> google.spanner.executor.v1.OperationResponse
+	64,  // 98: google.spanner.executor.v1.AdminResult.database_response:type_name -> google.spanner.executor.v1.CloudDatabaseResponse
+	62,  // 99: google.spanner.executor.v1.AdminResult.instance_response:type_name -> google.spanner.executor.v1.CloudInstanceResponse
+	63,  // 100: google.spanner.executor.v1.AdminResult.instance_config_response:type_name -> google.spanner.executor.v1.CloudInstanceConfigResponse
+	88,  // 101: google.spanner.executor.v1.CloudBackupResponse.listed_backups:type_name -> google.spanner.admin.database.v1.Backup
+	89,  // 102: google.spanner.executor.v1.CloudBackupResponse.listed_backup_operations:type_name -> google.longrunning.Operation
+	88,  // 103: google.spanner.executor.v1.CloudBackupResponse.backup:type_name -> google.spanner.admin.database.v1.Backup
+	89,  // 104: google.spanner.executor.v1.OperationResponse.listed_operations:type_name -> google.longrunning.Operation
+	89,  // 105: google.spanner.executor.v1.OperationResponse.operation:type_name -> google.longrunning.Operation
+	90,  // 106: google.spanner.executor.v1.CloudInstanceResponse.listed_instances:type_name -> google.spanner.admin.instance.v1.Instance
+	90,  // 107: google.spanner.executor.v1.CloudInstanceResponse.instance:type_name -> google.spanner.admin.instance.v1.Instance
+	91,  // 108: google.spanner.executor.v1.CloudInstanceConfigResponse.listed_instance_configs:type_name -> google.spanner.admin.instance.v1.InstanceConfig
+	91,  // 109: google.spanner.executor.v1.CloudInstanceConfigResponse.instance_config:type_name -> google.spanner.admin.instance.v1.InstanceConfig
+	92,  // 110: google.spanner.executor.v1.CloudDatabaseResponse.listed_databases:type_name -> google.spanner.admin.database.v1.Database
+	89,  // 111: google.spanner.executor.v1.CloudDatabaseResponse.listed_database_operations:type_name -> google.longrunning.Operation
+	92,  // 112: google.spanner.executor.v1.CloudDatabaseResponse.database:type_name -> google.spanner.admin.database.v1.Database
+	12,  // 113: google.spanner.executor.v1.ReadResult.row:type_name -> google.spanner.executor.v1.ValueList
+	93,  // 114: google.spanner.executor.v1.ReadResult.row_type:type_name -> google.spanner.v1.StructType
+	12,  // 115: google.spanner.executor.v1.QueryResult.row:type_name -> google.spanner.executor.v1.ValueList
+	93,  // 116: google.spanner.executor.v1.QueryResult.row_type:type_name -> google.spanner.v1.StructType
+	68,  // 117: google.spanner.executor.v1.ChangeStreamRecord.data_change:type_name -> google.spanner.executor.v1.DataChangeRecord
+	69,  // 118: google.spanner.executor.v1.ChangeStreamRecord.child_partition:type_name -> google.spanner.executor.v1.ChildPartitionsRecord
+	70,  // 119: google.spanner.executor.v1.ChangeStreamRecord.heartbeat:type_name -> google.spanner.executor.v1.HeartbeatRecord
+	82,  // 120: google.spanner.executor.v1.DataChangeRecord.commit_time:type_name -> google.protobuf.Timestamp
+	79,  // 121: google.spanner.executor.v1.DataChangeRecord.column_types:type_name -> google.spanner.executor.v1.DataChangeRecord.ColumnType
+	80,  // 122: google.spanner.executor.v1.DataChangeRecord.mods:type_name -> google.spanner.executor.v1.DataChangeRecord.Mod
+	82,  // 123: google.spanner.executor.v1.ChildPartitionsRecord.start_time:type_name -> google.protobuf.Timestamp
+	81,  // 124: google.spanner.executor.v1.ChildPartitionsRecord.child_partitions:type_name -> google.spanner.executor.v1.ChildPartitionsRecord.ChildPartition
+	82,  // 125: google.spanner.executor.v1.HeartbeatRecord.heartbeat_time:type_name -> google.protobuf.Timestamp
+	83,  // 126: google.spanner.executor.v1.QueryAction.Parameter.type:type_name -> google.spanner.v1.Type
+	9,   // 127: google.spanner.executor.v1.QueryAction.Parameter.value:type_name -> google.spanner.executor.v1.Value
+	83,  // 128: google.spanner.executor.v1.MutationAction.InsertArgs.type:type_name -> google.spanner.v1.Type
+	12,  // 129: google.spanner.executor.v1.MutationAction.InsertArgs.values:type_name -> google.spanner.executor.v1.ValueList
+	83,  // 130: google.spanner.executor.v1.MutationAction.UpdateArgs.type:type_name -> google.spanner.v1.Type
+	12,  // 131: google.spanner.executor.v1.MutationAction.UpdateArgs.values:type_name -> google.spanner.executor.v1.ValueList
+	72,  // 132: google.spanner.executor.v1.MutationAction.Mod.insert:type_name -> google.spanner.executor.v1.MutationAction.InsertArgs
+	73,  // 133: google.spanner.executor.v1.MutationAction.Mod.update:type_name -> google.spanner.executor.v1.MutationAction.UpdateArgs
+	72,  // 134: google.spanner.executor.v1.MutationAction.Mod.insert_or_update:type_name -> google.spanner.executor.v1.MutationAction.InsertArgs
+	72,  // 135: google.spanner.executor.v1.MutationAction.Mod.replace:type_name -> google.spanner.executor.v1.MutationAction.InsertArgs
+	11,  // 136: google.spanner.executor.v1.MutationAction.Mod.delete_keys:type_name -> google.spanner.executor.v1.KeySet
+	94,  // 137: google.spanner.executor.v1.PartitionedUpdateAction.ExecutePartitionedUpdateOptions.rpc_priority:type_name -> google.spanner.v1.RequestOptions.Priority
+	2,   // 138: google.spanner.executor.v1.SpannerExecutorProxy.ExecuteActionAsync:input_type -> google.spanner.executor.v1.SpannerAsyncActionRequest
+	3,   // 139: google.spanner.executor.v1.SpannerExecutorProxy.ExecuteActionAsync:output_type -> google.spanner.executor.v1.SpannerAsyncActionResponse
+	139, // [139:140] is the sub-list for method output_type
+	138, // [138:139] is the sub-list for method input_type
+	138, // [138:138] is the sub-list for extension type_name
+	138, // [138:138] is the sub-list for extension extendee
+	0,   // [0:138] is the sub-list for field type_name
 }
 
 func init() { file_google_spanner_executor_v1_cloud_executor_proto_init() }
